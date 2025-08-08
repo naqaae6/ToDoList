@@ -27,11 +27,17 @@ struct ContentView: View {
             List {
                 ForEach(toDos) {toDoItem in
                     Text(toDoItem.title)
+                    if toDoItem.isImportant {
+                        Text("‼️" + toDoItem.title)
+                    } else {
+                        Text(toDoItem.title)
+                    }
                 }
             }
+            .listStyle(.plain)
         }//end of the VStack
         if showNewTask {
-            NewToDoView()
+            NewToDoView(showNewTask: $showNewTask, toDoItem: toDoItem(title: "", isImportant: false))
             }
         }
     }
