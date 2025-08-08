@@ -4,6 +4,7 @@ import SwiftUI
 struct ContentView: View {
     @State private var showNewTask = false
     @Query var toDos: [toDoItem]
+    @Environment(\.modelContext) var modelContext
     var body: some View {
         VStack {
             HStack{
@@ -29,12 +30,16 @@ struct ContentView: View {
                     Text(toDoItem.title)
                     if toDoItem.isImportant {
                         Text("‼️" + toDoItem.title)
-                    } else {
-                        Text(toDoItem.title)
-                    }
+                    } else
+                        
+            .onDelete(perform:deleteToDo)
+            .listStyle(.plain)
+            func deleteToDo(at offsets: IndexSet) {
+                for offset in offsets {
+                    let toDoItem = toDos[offset]
+                    modelContext.delete(toDoItem)
                 }
             }
-            .listStyle(.plain)
         }//end of the VStack
         if showNewTask {
             NewToDoView(showNewTask: $showNewTask, toDoItem: toDoItem(title: "", isImportant: false))
